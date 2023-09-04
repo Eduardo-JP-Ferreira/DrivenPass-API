@@ -10,7 +10,7 @@ export class CreateCardDto {
   
   @IsNotEmpty()
   @IsNumberString()
-  @ApiProperty({ example: "9999 9999 9999 9999", description: "card's number" })
+  @ApiProperty({ example: "9999999999999999", description: "card's number" })
   number: string;
   
   @IsNotEmpty()
