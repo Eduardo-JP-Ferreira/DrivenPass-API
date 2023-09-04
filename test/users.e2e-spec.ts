@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { PrismaModule } from '../src/prisma/prisma.module';
-import { cleanDb } from './ultis';
 
-describe('AppController (e2e)', () => {
+describe('Users', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
@@ -16,9 +15,8 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe());
     prisma = await moduleFixture.get(PrismaService);
-    await cleanDb();
+    await prisma.user.deleteMany();
     await app.init();
   });
 
