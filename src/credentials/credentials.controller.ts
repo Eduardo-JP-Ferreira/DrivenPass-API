@@ -4,13 +4,17 @@ import { CreateCredentialDto } from './dto/create-credential.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
 import { User as UserPrisma } from '@prisma/client';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard)
+@ApiTags('Credentials')
 @Controller('credentials')
 export class CredentialsController {
   constructor(private readonly credentialsService: CredentialsService) {}
   
   @Post()
+  @ApiOperation({summary: "Create a new Credential"})
+  @ApiBody({type: CreateCredentialDto})
   async createTweet(@Body() createCredentialDto: CreateCredentialDto, @User() user: UserPrisma) {
     try {
       return await this.credentialsService.create(createCredentialDto, user);
@@ -20,6 +24,7 @@ export class CredentialsController {
   }
   
   @Get()
+  @ApiOperation({summary: "Find a Credential"})
   async findAll(@User() user: UserPrisma) {
     try {
       return await this.credentialsService.findAllByUserId(user.id);
@@ -29,6 +34,7 @@ export class CredentialsController {
   }
 
   @Get(':id')
+  @ApiOperation({summary: "Find a Credential by Id"})
   async findOne(@Param('id') id: string, @User() user: UserPrisma) {
     try {
       return await this.credentialsService.findOneById(+id, user.id);
@@ -39,6 +45,7 @@ export class CredentialsController {
   }
 
   @Delete(':id')
+  @ApiOperation({summary: "Delete a Credential"})
   async remove(@Param('id') id: string, @User() user: UserPrisma) {
     try {
       return this.credentialsService.remove(+id, user.id);

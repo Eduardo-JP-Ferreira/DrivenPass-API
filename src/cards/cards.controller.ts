@@ -4,13 +4,17 @@ import { CreateCardDto } from './dto/create-card.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
 import { User as UserPrisma } from '@prisma/client';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard)
+@ApiTags('Cards')
 @Controller('cards')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
   @Post()
+  @ApiOperation({summary: "Create a new Card"})
+  @ApiBody({type: CreateCardDto})
   async createTweet(@Body() createCardDto: CreateCardDto, @User() user: UserPrisma) {
     try {
       return await this.cardsService.create(createCardDto, user);
@@ -20,6 +24,7 @@ export class CardsController {
   }
   
   @Get()
+  @ApiOperation({summary: "Find a Card"})
   async findAll(@User() user: UserPrisma) {
     try {
       return await this.cardsService.findAllByUserId(user.id);
@@ -29,6 +34,7 @@ export class CardsController {
   }
 
   @Get(':id')
+  @ApiOperation({summary: "Find a Card by Id"})
   async findOne(@Param('id') id: string, @User() user: UserPrisma) {
     try {
       return await this.cardsService.findOneById(+id, user.id);
@@ -39,6 +45,7 @@ export class CardsController {
   }
 
   @Delete(':id')
+  @ApiOperation({summary: "Delete a Card"})
   async remove(@Param('id') id: string, @User() user: UserPrisma) {
     try {
       return this.cardsService.remove(+id, user.id);
