@@ -37,9 +37,10 @@ export class CredentialsRepository {
     })
   }
 
-  delete(id: number) {
-    return this.prisma.credential.delete({
+  async delete(id: number) {
+    await this.prisma.credential.delete({
       where: { id }
     })
+    return
   }
 }

@@ -1,46 +1,47 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateNoteDto } from './dto/create-note.dto';
+import { CreateCardDto } from './dto/create-card.dto';
 
 @Injectable()
-export class NotesRepository {
+export class CardsRepository {
 
   private SALT = 10;
   constructor(private readonly prisma: PrismaService) { }
 
-  async create(createNoteDto: CreateNoteDto, userId: number) {
-    await this.prisma.note.create({
+  async create(createCardDto: CreateCardDto, userId: number) {
+
+    await this.prisma.card.create({
       data: {
-        ...createNoteDto,
+        ...createCardDto,
         userId
       }
     })
-
-    return
+    return 
   }
 
   findAllByUserId(userId: number) {
-    return this.prisma.note.findMany({
+    return this.prisma.card.findMany({
       where: { userId }
     })
   }
   
   findOneById(id: number) {
-    return this.prisma.note.findUnique({
+    return this.prisma.card.findUnique({
       where: { id }
     })
   }
 
-  getNoteByTitle(title: string, userId: number) {
-    return this.prisma.note.findFirst({
+  getCardByTitle(title: string, userId: number) {
+    return this.prisma.card.findFirst({
       where: { title, userId}
     })
   }
 
   async delete(id: number) {
-    await this.prisma.note.delete({
+    await this.prisma.card.delete({
       where: { id }
     })
     return
   }
+  
 }

@@ -16,6 +16,7 @@ model User {
   password     String
   Credential   Credential[]
   Note         Note[]
+  Card         Card[]
   
   @@map("users")
 }
@@ -40,4 +41,20 @@ model Note {
   User            User          @relation(fields: [userId], references: [id])
 
   @@map("notes")
+}
+
+model Card{
+  id              Int           @id @default(autoincrement())
+  title           String
+  number          String
+  name            String
+  cvc             String
+  expirationDate  String
+  password        String
+  virtual         Boolean
+  type            String
+  userId          Int
+  User            User          @relation(fields: [userId], references: [id])
+
+  @@map("cards")
 }
